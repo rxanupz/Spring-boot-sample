@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.repository.CustomerRepository;
 import com.sample.domain.Customer;
-import com.sample.util.CustomerService;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,27 +21,26 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer createCustomer(Customer customer) {
+    public Mono<Customer> createCustomer(Customer customer) {
         // Implement logic to create a new customer
         // You can perform validation and any necessary business logic here
         return customerRepository.save(customer);
     }
 
-    @Override
-    public Customer getCustomerById(String id) {
+    public Mono<Customer> getCustomerById(String id) {
         // Implement logic to retrieve a customer by ID
-        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        Mono<Customer> optionalCustomer = customerRepository.findById(id);
         return optionalCustomer.orElse(null);
     }
 
     @Override
-    public List<Customer> getAllCustomers() {
+    public Flux<Customer> getAllCustomers() {
         // Implement logic to retrieve all customers
         return customerRepository.findAll();
     }
 
     @Override
-    public Customer updateCustomer(String id, Customer customer) {
+    public Mono<Customer> updateCustomer(String id, Customer customer) {
         // Implement logic to update a customer by ID
         if (customerRepository.existsById(id)) {
             customer.setId(id); // Ensure the updated ID matches the existing record
